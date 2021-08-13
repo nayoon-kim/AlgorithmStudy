@@ -8,6 +8,7 @@ public class Main_김나윤 {
     static int[] numbers, input;
 
     public static void main(String[] args) throws Exception {
+        // 입력
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
@@ -57,16 +58,20 @@ public class Main_김나윤 {
             for (int n = 0; n < 3; n++) {
                 // 왼쪽부터 궁수가 있으면 적을 찾는다.
                 // 공격 가능 범위만큼 거슬러 올라가서 찾는다.
+
+                // 가장 가까운 적과 가장 왼쪽에 있는 적을 찾기 위한 변수 선언
                 int a = Integer.MAX_VALUE, x = M, y = M;
                 for (int d = 0; d < D && i - d >= 0; d++) {
                     for (int j = 0; j < M; j++) {
                         // 해당 위치에 적이 있고 공격 가능 범위에 들어가면 적을 쏜다.
                         if (clone[i - d][j] == 1 && (d + 1) + Math.abs(j - numbers[n]) <= D && a >= (d + 1) + Math.abs(j - numbers[n])) {
+                            // 만약 지금까지 만난 적 중 가장 가까울 경우
                             if(a > (d+1) + Math.abs(j - numbers[n])) {
                                 a = (d + 1) + Math.abs(j - numbers[n]);
                                 x = i - d;
                                 y = j;
                             }
+                            // 지금까지 만난 적 중 가장 가까우면서 가장 왼쪽에 있는 적
                             else if (a == (d+1) + Math.abs(j - numbers[n]) && j < y) {
                                 x = i - d;
                                 y = j;
@@ -74,15 +79,17 @@ public class Main_김나윤 {
                         }
                     }
                 }
-                if (a != Integer.MAX_VALUE) {
+                // 공격할 적들의 위치를 ArrayList에 저장
+                if (a != Integer.MAX_VALUE)
                     arr.add(new int[] {x, y});
-                }
+
             }
 
             for(int[] a: arr) {
-                if (clone[a[0]][a[1]] == 0) {
-                    continue;
-                }
+                // 이미 공격받아 없어진 적의 경우 넘어간다.
+                if (clone[a[0]][a[1]] == 0) continue;
+
+                // 적 공격 시, 해당 위치를 빈 공간으로 바꾸고 count를 1 올린다.
                 clone[a[0]][a[1]] = 0;
                 count++;
             }
@@ -90,3 +97,26 @@ public class Main_김나윤 {
         result = Math.max(result, count);
     }
 }
+/*
+큰 도움을 준 반례들..
+
+2 7 2
+0 0 1 0 1 0 1
+1 0 1 0 1 0 0
+5
+
+4 4 3
+0 1 1 0
+0 0 1 1
+1 0 1 0
+1 1 1 0
+8
+
+5 5 2
+1 0 1 1 1
+0 1 1 1 1
+1 0 1 0 1
+1 1 0 1 0
+1 0 1 0 1
+14
+ */
